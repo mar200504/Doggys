@@ -47,7 +47,6 @@ gltfLoaders.load(
         scene.add(gltf.scene)
         foxes.push(gltf.scene)
         Tobey = gltf.scene;
-        scene.visiblity= false
     }
 )
 
