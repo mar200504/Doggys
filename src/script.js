@@ -28,15 +28,19 @@ const gltfLoaders = new GLTFLoader()
 gltfLoaders.setDRACOLoader(dracoLoader)
 
 let mixer = null
+let Mokke =[];
+let Tobey =[];
+let Fredy =[];
 
 gltfLoaders.load(
     '/models/Mokke/glTF/mokke.gltf',
     (gltf) => {
         scene.add(...gltf.scene.children);
-        scene.add(gltf.scene)
-        foxes.push(gltf.scene)
+        Mokke.push(gltf.scene);
+        console.log(gltf);
         Mokke = gltf.scene;
-        gltf.scene.scale.set(0.025, 0.025, 0.025)
+        
+         
     }
 )
 
@@ -44,8 +48,7 @@ gltfLoaders.load(
     '/models/Tobey/glTF/Tobey.gltf',
     (gltf) => {
         scene.add(...gltf.scene.children);
-        scene.add(gltf.scene)
-        foxes.push(gltf.scene)
+        Tobey.push(gltf.scene);
         Tobey = gltf.scene;
     }
 )
@@ -54,9 +57,8 @@ gltfLoaders.load(
     '/models/Freddy/glTF/Freddy.gltf',
     (gltf) => {
         scene.add(...gltf.scene.children);
-        scene.add(gltf.scene)
-        foxes.push(gltf.scene)
-        Freddy = gltf.scene;
+        Fredy.push(gltf.scene);
+        Fredy = gltf.scene;
     }
 )
 
@@ -65,7 +67,7 @@ gltfLoaders.load(
  * Floor
  */
 const floor = new THREE.Mesh(
-    new THREE.PlaneGeometry(10, 10),
+    new THREE.PlaneGeometry(50, 50),
     new THREE.MeshStandardMaterial({
         color: '#006000',
         metalness: 0,
@@ -121,7 +123,7 @@ window.addEventListener('resize', () =>
  */
 // Base camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
-camera.position.set(0, 0, 0)
+camera.position.set(7, 6.5, 6)
 scene.add(camera)
 
 // Controls
@@ -171,3 +173,33 @@ const tick = () =>
 }
 
 tick()
+
+//seleccion
+var botonMokke = document.getElementById('bMokke');
+var botonFredy = document.getElementById('bTobey');
+var botonTobey = document.getElementById('bFredy');
+
+function elegirAMokke(){
+    Mokke.visible =true;
+
+    Fredy.visible=false;
+    Tobey.visible=false;
+}
+
+function elegirATobey(){
+    Tobey.visible= true;
+
+    Mokke.visible= false;
+    Fredy.visible= false;
+}
+
+function elegirAFredy(){
+    Fredy.visible= true;
+
+    Mokke.visible= false;
+    Tobey.visible= false;
+}
+
+botonMokke.addEventListener('click', elegirAMokke);
+botonTobey.addEventListener('click', elegirATobey);
+botonFredy.addEventListener('click', elegirAFredy)
