@@ -17,16 +17,7 @@ const canvas = document.querySelector('canvas.webgl')
 // Scene
 const scene = new THREE.Scene()
 
-//Fondo
-const planeGeometry = new THREE.PlaneGeometry(100, 100);
 
-const planeMaterial = new THREE.MeshStandardMaterial({
-    color: '#fff', 
-    side: THREE.DoubleSide,
-});
-const plane = new THREE.Mesh(planeGeometry, planeMaterial);
-
-plane.rotation.x = -Math.PI / 2; 
 
 /**
  * Models
@@ -84,6 +75,19 @@ gltfLoaders.load(
 )
 
 
+/**
+ * Floor
+ */
+const floor = new THREE.Mesh(
+  new THREE.PlaneGeometry(100, 100),
+  new THREE.MeshStandardMaterial({
+      color: '#444444',
+      metalness: 0,
+      roughness: 0.5
+  })
+)
+floor.receiveShadow = true
+scene.add(floor)
 
 
 /**
@@ -199,7 +203,29 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap
 renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
+/**
+ * Animate
+ */
+const clock = new THREE.Clock()
+let previousTime = 0
 
+const tick = () =>
+{
+    const elapsedTime = clock.getElapsedTime()
+    const deltaTime = elapsedTime - previousTime
+    previousTime = elapsedTime
+
+    // Update controls
+    controls.update()
+
+    // Render
+    renderer.render(scene, camera)
+
+    // Call tick again on the next frame
+    window.requestAnimationFrame(tick)
+}
+
+tick()
 
 
 //seleccion
