@@ -4,7 +4,6 @@ import { GLTFLoader }  from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 import GUI from 'lil-gui'
 
-
 console.log(DRACOLoader)
 /**
  * Base
@@ -17,6 +16,17 @@ const canvas = document.querySelector('canvas.webgl')
 
 // Scene
 const scene = new THREE.Scene()
+
+//Fondo
+const planeGeometry = new THREE.PlaneGeometry(100, 100);
+
+const planeMaterial = new THREE.MeshStandardMaterial({
+    color: '#fff', 
+    side: THREE.DoubleSide,
+});
+const plane = new THREE.Mesh(planeGeometry, planeMaterial);
+
+plane.rotation.x = -Math.PI / 2; 
 
 /**
  * Models
@@ -35,48 +45,46 @@ let Fredy =[];
 gltfLoaders.load(
     '/models/Mokke/glTF/mokke.gltf',
     (gltf) => {
-        scene.add(...gltf.scene.children);
+        scene.add(gltf.scene);
         Mokke.push(gltf.scene);
-        console.log(gltf);
         Mokke = gltf.scene;
+        Mokke.position.y = -2;
+        Mokke.position.z=-1;
+        Mokke.position.x=4;
+        Mokke.visible= true;
         
          
     }
 )
-
 gltfLoaders.load(
     '/models/Tobey/glTF/Tobey.gltf',
     (gltf) => {
-        scene.add(...gltf.scene.children);
+        scene.add(gltf.scene);
         Tobey.push(gltf.scene);
         Tobey = gltf.scene;
+        Tobey.rotation.y = Math.PI / -2;
+        Tobey.position.z= -1;
+        Tobey.position.x=3;
+        Tobey.visible = false;
     }
 )
 
 gltfLoaders.load(
     '/models/Freddy/glTF/Freddy.gltf',
     (gltf) => {
-        scene.add(...gltf.scene.children);
+        scene.add(gltf.scene);
         Fredy.push(gltf.scene);
         Fredy = gltf.scene;
+        Fredy.rotation.y = Math.PI / -2;
+        Fredy.scale.set(1.3,1.3,1.3);
+        Fredy.position.z=-1;
+        Fredy.position.x=5;
+        Fredy.visible= false;
     }
 )
 
 
-/**
- * Floor
- */
-const floor = new THREE.Mesh(
-    new THREE.PlaneGeometry(50, 50),
-    new THREE.MeshStandardMaterial({
-        color: '#006000',
-        metalness: 0,
-        roughness: 1.5
-    })
-)
-floor.receiveShadow = true
-floor.rotation.x = - Math.PI * 0.5
-scene.add(floor)
+
 
 /**
  * Lights
@@ -123,13 +131,62 @@ window.addEventListener('resize', () =>
  */
 // Base camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
-camera.position.set(7, 6.5, 6)
+camera.position.set(0, 7,  13)
 scene.add(camera)
+
+console.log(camera.position)
 
 // Controls
 const controls = new OrbitControls(camera, canvas)
 controls.target.set(0, 0.75, 0)
 controls.enableDamping = true
+
+// Movement variables
+const movement = {
+    left: false,
+    right: false,
+    up: false,
+    down: false,
+  };
+  
+  // Event listeners to track key presses
+  function handleKeyDown(event) {
+    switch (event.code) {
+      case 'ArrowLeft':
+        movement.left = true;
+        break;
+      case 'ArrowRight':
+        movement.right = true;
+        break;
+      case 'ArrowUp':
+        movement.up = true;
+        break;
+      case 'ArrowDown':
+        movement.down = true;
+        break;
+    }
+  }
+  
+  function handleKeyUp(event) {
+    switch (event.code) {
+      case 'ArrowLeft':
+        movement.left = false;
+        break;
+      case 'ArrowRight':
+        movement.right = false;
+        break;
+      case 'ArrowUp':
+        movement.up = false;
+        break;
+      case 'ArrowDown':
+        movement.down = false;
+        break;
+    }
+  }
+  
+  document.addEventListener('keydown', handleKeyDown);
+  document.addEventListener('keyup', handleKeyUp);
+  
 
 /**
  * Renderer
@@ -142,48 +199,33 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap
 renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
-/**
- * Animate
- */
-const clock = new THREE.Clock()
-let previousTime = 0
 
-const tick = () =>
-{
-    const elapsedTime = clock.getElapsedTime()
-    const deltaTime = elapsedTime - previousTime
-    previousTime = elapsedTime
 
-   // Update mixer
-   if(mixer !== null)
-   {
-        mixer.update(deltaTime)
-   }
-   
-
-   
-    // Update controls
-    controls.update()
-
-    // Render
-    renderer.render(scene, camera)
-
-    // Call tick again on the next frame
-    window.requestAnimationFrame(tick)
-}
-
-tick()
 
 //seleccion
 var botonMokke = document.getElementById('bMokke');
-var botonFredy = document.getElementById('bTobey');
-var botonTobey = document.getElementById('bFredy');
+var botonTobey = document.getElementById('bTobey');
+var botonFredy = document.getElementById('bFredy');
 
 function elegirAMokke(){
     Mokke.visible =true;
 
     Fredy.visible=false;
     Tobey.visible=false;
+
+    function animate() {
+        requestAnimationFrame(animate);
+      
+        // Update object position based on movement
+        if (movement.left) Mokke.position.x -= 0.1;
+        if (movement.right) Mokke.position.x += 0.1;
+        if (movement.up) Mokke.position.y += 0.1;
+        if (movement.down) Mokke.position.y -= 0.1;
+      
+        renderer.render(scene, camera);
+      }
+      
+      animate();
 }
 
 function elegirATobey(){
@@ -191,6 +233,20 @@ function elegirATobey(){
 
     Mokke.visible= false;
     Fredy.visible= false;
+
+    function animate() {
+        requestAnimationFrame(animate);
+      
+        // Update object position based on movement
+        if (movement.left) Tobey.position.x -= 0.1;
+        if (movement.right) Tobey.position.x += 0.1;
+        if (movement.up) Tobey.position.y += 0.1;
+        if (movement.down) Tobey.position.y -= 0.1;
+      
+        renderer.render(scene, camera);
+      }
+      
+      animate();
 }
 
 function elegirAFredy(){
@@ -198,6 +254,20 @@ function elegirAFredy(){
 
     Mokke.visible= false;
     Tobey.visible= false;
+
+    function animate() {
+        requestAnimationFrame(animate);
+      
+        // Update object position based on movement
+        if (movement.left) Fredy.position.x -= 0.1;
+        if (movement.right) Fredy.position.x += 0.1;
+        if (movement.up) Fredy.position.y += 0.1;
+        if (movement.down) Fredy.position.y -= 0.1;
+      
+        renderer.render(scene, camera);
+      }
+      
+      animate();
 }
 
 botonMokke.addEventListener('click', elegirAMokke);
