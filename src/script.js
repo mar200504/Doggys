@@ -42,7 +42,7 @@ gltfLoaders.load(
         Mokke.position.y = -2;
         Mokke.position.z=-1;
         Mokke.position.x=4;
-        Mokke.visible= true;
+        Mokke.visible= false;
         
          
     }
@@ -75,19 +75,82 @@ gltfLoaders.load(
 )
 
 
+
 /**
- * Floor
+ * esfera
  */
-const floor = new THREE.Mesh(
-  new THREE.PlaneGeometry(100, 100),
+const esfera = new THREE.Mesh(
+  new THREE.SphereGeometry(100,64, 64),
   new THREE.MeshStandardMaterial({
-      color: '#444444',
+      color: '#a3d6ca',
       metalness: 0,
       roughness: 0.5
-  })
-)
-floor.receiveShadow = true
-scene.add(floor)
+    })
+  )
+esfera.position.z=-100;
+esfera.position.y=-100;
+esfera.position.x=-100;
+esfera.receiveShadow = true
+scene.add(esfera)
+
+const esfera2 = new THREE.Mesh(
+  new THREE.SphereGeometry(100,64, 64),
+  new THREE.MeshStandardMaterial({
+      color: '#d3a6e0',
+      metalness: 0,
+      roughness: 0.5
+    })
+  )
+esfera2.position.z=-150;
+esfera2.position.y=60;
+esfera2.position.x=60;
+esfera2.receiveShadow = true
+scene.add(esfera2)
+
+const esfera3 = new THREE.Mesh(
+  new THREE.SphereGeometry(100,64, 64),
+  new THREE.MeshStandardMaterial({
+      color: '#e1edbb',
+      metalness: 0,
+      roughness: 0.5
+    })
+  )
+esfera3.position.z=-145;
+esfera3.position.y=-110;
+esfera3.position.x=40;
+esfera3.receiveShadow = true
+scene.add(esfera3)
+
+const esfera4 = new THREE.Mesh(
+  new THREE.SphereGeometry(100,64, 64),
+  new THREE.MeshStandardMaterial({
+      color: '#a391ed',
+      metalness: 0,
+      roughness: 0.5
+    })
+  )
+esfera4.position.z=-150;
+esfera4.position.y=-90;
+esfera4.position.x=150;
+esfera4.receiveShadow = true
+scene.add(esfera4)
+
+const esfera5 = new THREE.Mesh(
+  new THREE.SphereGeometry(70,64, 64),
+  new THREE.MeshStandardMaterial({
+      color: '#e6a17a',
+      metalness: 0,
+      roughness: 0.5
+    })
+  )
+esfera5.position.z=-150;
+esfera5.position.y=50;
+esfera5.position.x=-110;
+esfera5.receiveShadow = true
+scene.add(esfera5)
+
+
+
 
 
 /**
