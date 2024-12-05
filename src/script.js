@@ -32,6 +32,7 @@ let mixer = null
 let Mokke =[];
 let Tobey =[];
 let Fredy =[];
+let JumpBar =[];
 
 gltfLoaders.load(
     '/models/Mokke/glTF/mokke.gltf',
@@ -72,6 +73,20 @@ gltfLoaders.load(
         Fredy.position.x=5;
         Fredy.visible= false;
     }
+)
+
+gltfLoaders.load(
+  '/models/JumpBar/glTF/jumpBar.gltf',
+  (gltf) => {
+      scene.add(gltf.scene);
+      JumpBar.push(gltf.scene);
+      JumpBar = gltf.scene;
+      JumpBar.scale.set(0.3,0.3,0.3);
+      JumpBar.rotation.y = Math.PI / -2;
+      JumpBar.position.z=7;
+      JumpBar.position.x=0;
+      JumpBar.position.y=0;
+  }
 )
 
 
@@ -218,6 +233,7 @@ const movement = {
   
   // Event listeners to track key presses
   function handleKeyDown(event) {
+    console.log(event.code);
     switch (event.code) {
       case 'ArrowLeft':
         movement.left = true;
@@ -231,9 +247,15 @@ const movement = {
       case 'ArrowDown':
         movement.down = true;
         break;
+      case 'KeyW':
+        movement.front = true;
+        break;
+      case 'KeyS':
+        movement.back = true;
+        break;
     }
   }
-  
+
   function handleKeyUp(event) {
     switch (event.code) {
       case 'ArrowLeft':
@@ -248,6 +270,12 @@ const movement = {
       case 'ArrowDown':
         movement.down = false;
         break;
+        case 'KeyW':
+          movement.front = false;
+          break;
+        case 'KeyS':
+          movement.back = false;
+          break;
     }
   }
   
@@ -310,6 +338,8 @@ function elegirAMokke(){
         if (movement.right) Mokke.position.x += 0.1;
         if (movement.up) Mokke.position.y += 0.1;
         if (movement.down) Mokke.position.y -= 0.1;
+        if (movement.front) Mokke.position.z +=0.1;
+        if (movement.back) Mokke.position.z -=0.1;
       
         renderer.render(scene, camera);
       }
@@ -331,6 +361,8 @@ function elegirATobey(){
         if (movement.right) Tobey.position.x += 0.1;
         if (movement.up) Tobey.position.y += 0.1;
         if (movement.down) Tobey.position.y -= 0.1;
+        if (movement.front) Tobey.position.z +=0.1;
+        if (movement.back) Tobey.position.z -=0.1;
       
         renderer.render(scene, camera);
       }
@@ -352,6 +384,8 @@ function elegirAFredy(){
         if (movement.right) Fredy.position.x += 0.1;
         if (movement.up) Fredy.position.y += 0.1;
         if (movement.down) Fredy.position.y -= 0.1;
+        if (movement.front) Fredy.position.z +=0.1;
+        if (movement.back) Fredy.position.z -=0.1;
       
         renderer.render(scene, camera);
       }
